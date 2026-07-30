@@ -1,0 +1,6 @@
+- [x] Setup Resources (Colors & Icons) for Support Desk
+- [x] Implement `bg_support_header.xml`
+- [x] Implement `activity_support_desk.xml` Layout
+- [x] Link Support Desk from Dashboard
+- [x] Finalize Activity Logic in `SupportDesk.kt`
+- [x] Final Verification
