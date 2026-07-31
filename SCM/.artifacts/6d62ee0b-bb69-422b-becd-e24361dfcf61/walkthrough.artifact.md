@@ -1,31 +1,29 @@
-# Walkthrough - Project Conversion to Java
+# Walkthrough - Project Fixes for Build and Run
 
-I have successfully converted the remaining Kotlin activities in the project to Java. This ensures a consistent, single-language codebase for the entire application.
+I have successfully applied the fixes required to make the project compile and run correctly. These changes address dependency versioning issues and DTO reliability.
 
 ## Changes Made
 
-### 1. Activity Conversion
-The following activities were ported from Kotlin to standard Java:
-- [OrderDashboardActivity.java](file:///E:/Android/Android/SCM/app/src/main/java/com/project/scm/OrderDashboardActivity.java)
-- [TrackingDashboardActivity.java](file:///E:/Android/Android/SCM/app/src/main/java/com/project/scm/TrackingDashboardActivity.java)
-- [BillingPage.java](file:///E:/Android/Android/SCM/app/src/main/java/com/project/scm/BillingPage.java)
-- [SupportDesk.java](file:///E:/Android/Android/SCM/app/src/main/java/com/project/scm/SupportDesk.java)
+### 1. Build Configuration
+- Updated [build.gradle](file:///E:/Android/Android/SCM/app/build.gradle) to use stable versions of key libraries:
+    - Retrofit: `2.11.0` (from 3.0.0 which is not yet stable/standard).
+    - OkHttp: `4.12.0`.
+    - Lombok: `1.18.34`.
+    - Gson: `2.11.0`.
 
-### 2. Logic Porting
-- **Edge-to-Edge**: Implemented using `EdgeToEdge.enable(this)` and `ViewCompat.setOnApplyWindowInsetsListener`.
-- **Navigation**: Ported all bottom navigation and back-button listeners using standard Java lambdas.
-- **Character Counter**: Re-implemented the character counter in [SupportDesk.java](file:///E:/Android/Android/SCM/app/src/main/java/com/project/scm/SupportDesk.java) using `TextWatcher`.
-- **In-sets Handling**: Maintained proper padding for headers and bottom navigation bars.
+### 2. DTO Refactoring
+To ensure the project compiles reliably and the IDE can correctly resolve all symbols, I replaced the Lombok `@Data` annotation with explicit Java code (Getters, Setters, and default constructors) in the following files:
+- [LoginRequestDTO.java](file:///E:/Android/Android/SCM/app/src/main/java/com/project/scm/model/request/LoginRequestDTO.java)
+- [LoginResponseDTO.java](file:///E:/Android/Android/SCM/app/src/main/java/com/project/scm/model/response/LoginResponseDTO.java)
+- [CustomerResponseDTO.java](file:///E:/Android/Android/SCM/app/src/main/java/com/project/scm/model/response/CustomerResponseDTO.java)
 
-### 3. Cleanup
-- Removed all `.kt` source files from the project.
-- Verified that the `AndroidManifest.xml` correctly points to the new Java activity classes.
+### 3. Code Cleanup
+- Removed an unused import from [Login_Activity.java](file:///E:/Android/Android/SCM/app/src/main/java/com/project/scm/Login_Activity.java).
 
 ## Verification Results
 
-### Build Status
-- Ran a full Gradle build (`assembleDebug`).
-- **Result**: Build finished successfully.
+### Automated Build
+- Ran `gradle assembleDebug` and the build completed successfully without errors.
 
-> [!NOTE]
-> The project is now 100% Java. You can continue development using standard Java patterns.
+> [!TIP]
+> The project is now ready to be deployed to an emulator or a real device.

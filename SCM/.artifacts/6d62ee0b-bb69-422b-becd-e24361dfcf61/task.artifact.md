@@ -1,13 +1,13 @@
-- [x] Create Java versions of Activities
-    - [x] `OrderDashboardActivity.java`
-    - [x] `TrackingDashboardActivity.java`
-    - [x] `BillingPage.java`
-    - [x] `SupportDesk.java`
-- [x] Delete Kotlin Activities
-    - [x] `OrderDashboardActivity.kt`
-    - [x] `TrackingDashboardActivity.kt`
-    - [x] `BillingPage.kt`
-    - [x] `SupportDesk.kt`
-- [x] Final Verification
-    - [x] Build Project
-    - [x] Run App
+- [ ] Create Java versions of Activities
+    - [ ] `OrderDashboardActivity.java`
+    - [ ] `TrackingDashboardActivity.java`
+    - [ ] `BillingPage.java`
+    - [ ] `SupportDesk.java`
+- [ ] Delete Kotlin Activities
+    - [ ] `OrderDashboardActivity.kt`
+    - [ ] `TrackingDashboardActivity.kt`
+    - [ ] `BillingPage.kt`
+    - [ ] `SupportDesk.kt`
+- [ ] Final Verification
+    - [ ] Build Project
+    - [ ] Run App
