@@ -1,8 +1,10 @@
 package com.project.scm.model.response;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class LoginResponseDTO {
 
     private String  token;
@@ -13,4 +15,6 @@ public class LoginResponseDTO {
     private String  email;
     private String  phone;
     private String  role;
+
+
 }

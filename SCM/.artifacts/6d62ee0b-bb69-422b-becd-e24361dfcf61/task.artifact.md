@@ -1,6 +1,13 @@
-- [x] Setup Resources (Colors & Icons) for Support Desk
-- [x] Implement `bg_support_header.xml`
-- [x] Implement `activity_support_desk.xml` Layout
-- [x] Link Support Desk from Dashboard
-- [x] Finalize Activity Logic in `SupportDesk.kt`
+- [x] Create Java versions of Activities
+    - [x] `OrderDashboardActivity.java`
+    - [x] `TrackingDashboardActivity.java`
+    - [x] `BillingPage.java`
+    - [x] `SupportDesk.java`
+- [x] Delete Kotlin Activities
+    - [x] `OrderDashboardActivity.kt`
+    - [x] `TrackingDashboardActivity.kt`
+    - [x] `BillingPage.kt`
+    - [x] `SupportDesk.kt`
 - [x] Final Verification
+    - [x] Build Project
+    - [x] Run App

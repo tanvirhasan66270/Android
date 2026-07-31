@@ -1,7 +1,6 @@
 package com.project.scm;
 
 import android.content.Intent;
-import android.icu.text.DisplayOptions;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Toast;
@@ -11,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
+
 import com.project.scm.model.request.LoginRequestDTO;
 import com.project.scm.model.response.LoginResponseDTO;
 import com.project.scm.repository.AuthRepository;

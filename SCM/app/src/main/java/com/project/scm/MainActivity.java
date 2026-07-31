@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.project.scm.session.SessionManager;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -57,14 +59,13 @@ public class MainActivity extends AppCompatActivity {
         bounce.start();
 
         logo.postDelayed(() -> {
+            Class<?> targetActivity = new SessionManager(this).isLoggedIn()
+                ? Dashboard_Activity.class 
+                : Login_Activity.class;
 
-            Intent intent = new Intent(
-                    getApplicationContext(),
-                    Login_Activity.class);
-
+            Intent intent = new Intent(getApplicationContext(), targetActivity);
             startActivity(intent);
             finish();
-
         }, 3000);
 
 

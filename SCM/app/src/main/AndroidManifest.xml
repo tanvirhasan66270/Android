@@ -33,7 +33,7 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".tracking_Dashboard"
+            android:name=".TrackingDashboardActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity

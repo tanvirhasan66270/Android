@@ -1,8 +1,10 @@
 package com.project.scm.model.response;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class CustomerResponseDTO {
 
     private Long id;
@@ -31,4 +33,6 @@ public class CustomerResponseDTO {
     private String divisionName;
     private String districtName;
     private String policeStationName;
+
+
 }

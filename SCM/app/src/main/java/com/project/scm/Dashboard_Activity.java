@@ -10,6 +10,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.project.scm.session.SessionManager;
+
 public class Dashboard_Activity extends AppCompatActivity {
 
     @Override
@@ -19,28 +21,36 @@ public class Dashboard_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_dashboard);
 
         // Grid item: Track Product
-        findViewById(R.id.btn_track_product).setOnClickListener(v -> startActivity(new Intent(Dashboard_Activity.this, tracking_Dashboard.class)));
+        findViewById(R.id.btn_track_product).setOnClickListener(v ->
+                startActivity(new Intent(Dashboard_Activity.this, TrackingDashboardActivity.class)));
 
         // Grid item: Place New Order
-        findViewById(R.id.btn_new_order).setOnClickListener(v -> startActivity(new Intent(Dashboard_Activity.this, OrderDashboardActivity.class)));
+        findViewById(R.id.btn_new_order).setOnClickListener(v ->
+                startActivity(new Intent(Dashboard_Activity.this, OrderDashboardActivity.class)));
 
         // Grid item: Billing Ledger
-        findViewById(R.id.btn_billing_ledger).setOnClickListener(v -> startActivity(new Intent(Dashboard_Activity.this, BillingPage.class)));
+        findViewById(R.id.btn_billing_ledger).setOnClickListener(v ->
+                startActivity(new Intent(Dashboard_Activity.this, BillingPage.class)));
 
         // Grid item: Support Desk
-        findViewById(R.id.btn_support_desk).setOnClickListener(v -> startActivity(new Intent(Dashboard_Activity.this, SupportDesk.class)));
+        findViewById(R.id.btn_support_desk).setOnClickListener(v ->
+                startActivity(new Intent(Dashboard_Activity.this, SupportDesk.class)));
 
         // Bottom Nav item: Orders
-        findViewById(R.id.btn_nav_orders).setOnClickListener(v -> startActivity(new Intent(Dashboard_Activity.this, OrderDashboardActivity.class)));
+        findViewById(R.id.btn_nav_orders).setOnClickListener(v ->
+                startActivity(new Intent(Dashboard_Activity.this, OrderDashboardActivity.class)));
 
         // Bottom Nav item: Shipments
-        findViewById(R.id.btn_nav_shipments).setOnClickListener(v -> startActivity(new Intent(Dashboard_Activity.this, tracking_Dashboard.class)));
+        findViewById(R.id.btn_nav_shipments).setOnClickListener(v ->
+                startActivity(new Intent(Dashboard_Activity.this, TrackingDashboardActivity.class)));
 
         // Bottom Nav item: Billing
-        findViewById(R.id.btn_nav_billing).setOnClickListener(v -> startActivity(new Intent(Dashboard_Activity.this, BillingPage.class)));
+        findViewById(R.id.btn_nav_billing).setOnClickListener(v ->
+                startActivity(new Intent(Dashboard_Activity.this, BillingPage.class)));
 
         // Log Out Button
         findViewById(R.id.btn_logout).setOnClickListener(v -> {
+            new SessionManager(this).logout();
             startActivity(new Intent(Dashboard_Activity.this, Login_Activity.class));
             finish();
         });

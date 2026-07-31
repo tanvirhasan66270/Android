@@ -38,4 +38,7 @@
     <color name="support_blue_end">#1976D2</color>
     <color name="red_required">#F44336</color>
     <color name="priority_medium">#FF9800</color>
+
+    <color name="cyan_status">#00BCD4</color>
+    <color name="cyan_bg">#E0F7FA</color>
 </resources>

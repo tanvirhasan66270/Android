@@ -1,51 +1,41 @@
-# Implementation Plan - Support Desk
+# Implementation Plan - Convert Project to Pure Java
 
-The goal is to implement the "Support Desk" screen based on the provided design. This screen allows users to submit support tickets, view priority levels, and access immediate help channels (Call, Chat, Email).
+The goal is to convert all remaining Kotlin files in the project to Java to maintain a consistent single-language codebase.
 
 ## Proposed Changes
 
-### Resources
+### Activities (Kotlin to Java Conversion)
 
-#### [MODIFY] [colors.xml](file:///E:/Android/Android/SCM/app/src/main/res/values/colors.xml)
-- Add colors for header gradient and required field indicators.
+#### [NEW] [OrderDashboardActivity.java](file:///E:/Android/Android/SCM/app/src/main/java/com/project/scm/OrderDashboardActivity.java)
+- Port logic from `OrderDashboardActivity.kt`.
+- Implement `EdgeToEdge` and `WindowInsetsListener` in Java.
+- Setup button listeners and navigation.
 
-#### [NEW] [Drawables]
-- `ic_headset.xml`: Support icon for the header.
-- `ic_send.xml`: Plane icon for the submit button.
-- `ic_call.xml`, `ic_chat.xml`, `ic_email.xml`: Icons for help channels.
-- `ic_flag.xml`: Icon for priority level.
-- `bg_support_header.xml`: Blue gradient background for the header.
+#### [NEW] [TrackingDashboardActivity.java](file:///E:/Android/Android/SCM/app/src/main/java/com/project/scm/TrackingDashboardActivity.java)
+- Port logic from `TrackingDashboardActivity.kt`.
+- Implement navigation and UI setup in Java.
 
-### Layouts
+#### [NEW] [BillingPage.java](file:///E:/Android/Android/SCM/app/src/main/java/com/project/scm/BillingPage.java)
+- Port logic from `BillingPage.kt`.
 
-#### [MODIFY] [activity_support_desk.xml](file:///E:/Android/Android/SCM/app/src/main/res/layout/activity_support_desk.xml)
-- **Header**: Custom blue gradient area with a back button, headset icon, "Support Desk" title, notification badge, and profile initial.
-- **Scroll Container**: `NestedScrollView` containing the main form.
-- **Response Time Info**: A rounded card with an info icon explaining typical response times.
-- **Ticket Form**:
-    - **Issue Subject**: Input field with a required asterisk.
-    - **Related Order**: Optional order ID input field.
-    - **Priority Level**: Dropdown selection (MEDIUM/HIGH/LOW).
-    - **Issue Description**: Multi-line text area with a character counter.
-- **Immediate Help Section**: "Need Immediate Help?" horizontal cards for quick contact.
-- **Security Notice**: A card with a lock icon confirming data encryption.
-- **Actions**: "Submit Ticket" (Primary) and "Cancel" (Secondary) buttons.
-- **Bottom Navigation**: Standard bottom navigation bar with "Dashboard" as active or Profile if applicable.
+#### [NEW] [SupportDesk.java](file:///E:/Android/Android/SCM/app/src/main/java/com/project/scm/SupportDesk.java)
+- Port logic from `SupportDesk.kt`.
+- Implement `TextWatcher` for the character counter in Java.
 
-### Code
+### Cleanup
 
-#### [MODIFY] [SupportDesk.kt](file:///E:/Android/Android/SCM/app/src/main/java/com/project/scm/SupportDesk.kt)
-- Setup edge-to-edge rendering.
-- Initialize navigation for the back button.
-- Setup basic character counting logic for the description field.
+#### [DELETE] All `.kt` files
+- Remove `OrderDashboardActivity.kt`, `TrackingDashboardActivity.kt`, `BillingPage.kt`, and `SupportDesk.kt`.
 
-#### [MODIFY] [Dashboard_Activity.java](file:///E:/Android/Android/SCM/app/src/main/java/com/project/scm/Dashboard_Activity.java)
-- Link the "Support Desk" grid item to the `SupportDesk` activity.
+#### [MODIFY] [build.gradle](file:///E:/Android/Android/SCM/app/build.gradle)
+- (Optional) Remove Kotlin-specific plugins and dependencies if no longer needed.
 
 ## Verification Plan
 
+### Automated Tests
+- Run `gradle_build assembleDebug` to ensure the project compiles successfully after conversion.
+
 ### Manual Verification
-- Deploy the app and navigate to the Support Desk from the Dashboard.
-- Visually verify that the header gradient and icons match the design.
-- Check that the form is scrollable and inputs are interactive.
-- Verify the back button returns the user to the Dashboard.
+- Verify navigation between all screens (Dashboard -> Orders -> Tracking -> Billing -> Support).
+- Confirm character counting in Support Desk works.
+- Check that edge-to-edge layout remains correct.
