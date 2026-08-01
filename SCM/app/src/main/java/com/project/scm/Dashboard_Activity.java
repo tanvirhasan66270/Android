@@ -3,16 +3,40 @@ package com.project.scm;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
 
 import com.project.scm.session.SessionManager;
 
 public class Dashboard_Activity extends AppCompatActivity {
+
+    private TextView notification,profile;
+    private TextView welcomeTitleName;
+    private TextView walletBalance;
+    private TextView duePayment;
+    private TextView totalBalance;
+    private TextView activeOrder;
+    private TextView deliveredValue;
+    private TextView pendingValue;
+    private  TextView monthlyExpressTrendView;
+    private TextView orderStatusDistribution;
+    private ImageView activeOrderPipelineImage;
+    private TextView activeOrderPipelineDetails;
+    private TextView recentNotification;
+    private TextView recentActivityLog;
+    private ImageView productImage;
+    private TextView productName;
+    private TextView productPrice;
+    private TextView tvOrderId1;
+    private TextView orderDate;
+    private TextView tvStatus1;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
