@@ -57,5 +57,39 @@ public class BillingPage extends AppCompatActivity {
         findViewById(R.id.btnMenu).setOnClickListener(v -> {
             // Handle drawer or menu
         });
+        
+        loadInvoices();
+    }
+    
+    private void loadInvoices() {
+        com.project.scm.api.ApiService apiService = com.project.scm.api.ApiClient.getClient(getApplicationContext());
+        apiService.getAllInvoices().enqueue(new retrofit2.Callback<java.util.List<com.project.scm.model.response.InvoiceResponseDTO>>() {
+            @Override
+            public void onResponse(retrofit2.Call<java.util.List<com.project.scm.model.response.InvoiceResponseDTO>> call, retrofit2.Response<java.util.List<com.project.scm.model.response.InvoiceResponseDTO>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    java.util.List<com.project.scm.model.response.InvoiceResponseDTO> invoices = response.body();
+                    updateBillingUI(invoices);
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<java.util.List<com.project.scm.model.response.InvoiceResponseDTO>> call, Throwable t) {
+                android.widget.Toast.makeText(BillingPage.this, "Failed to load invoices", android.widget.Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void updateBillingUI(java.util.List<com.project.scm.model.response.InvoiceResponseDTO> invoices) {
+        double totalBalance = 0;
+        int invoiceCount = invoices.size();
+        
+        for (com.project.scm.model.response.InvoiceResponseDTO inv : invoices) {
+            totalBalance += inv.getDueAmount();
+        }
+        
+        android.widget.TextView balanceText = findViewById(R.id.tvBalanceAmount);
+        if (balanceText != null) {
+            balanceText.setText(String.format(java.util.Locale.getDefault(), "৳%.2f", totalBalance));
+        }
     }
 }

@@ -1,13 +1,5 @@
-- [ ] Create Java versions of Activities
-    - [ ] `OrderDashboardActivity.java`
-    - [ ] `TrackingDashboardActivity.java`
-    - [ ] `BillingPage.java`
-    - [ ] `SupportDesk.java`
-- [ ] Delete Kotlin Activities
-    - [ ] `OrderDashboardActivity.kt`
-    - [ ] `TrackingDashboardActivity.kt`
-    - [ ] `BillingPage.kt`
-    - [ ] `SupportDesk.kt`
-- [ ] Final Verification
-    - [ ] Build Project
-    - [ ] Run App
+- [ ] Create `item_pipeline_log.xml` for log entries
+- [ ] Create `PipelineAdapter.java` to manage the pipeline list
+- [ ] Update `activity_dashboard.xml` with `RecyclerView` and placeholder container
+- [ ] Update `Dashboard_Activity.java` to filter orders and populate the pipeline
+- [ ] Verify functionality with a build

@@ -1,41 +1,29 @@
-# Implementation Plan - Convert Project to Pure Java
+# Implementation Plan - Unique Product Images
 
-The goal is to convert all remaining Kotlin files in the project to Java to maintain a consistent single-language codebase.
+The goal is to ensure each product in the "Recommended For You" section displays its own unique image instead of a common hardcoded one.
+
+## User Review Required
+
+> [!IMPORTANT]
+> The app currently uses a hardcoded drawable (`baground.png`) as a fallback when a product image is missing or the path is incorrect. To fix this, the backend must provide unique image paths, and the app must correctly append the base image URL.
 
 ## Proposed Changes
 
-### Activities (Kotlin to Java Conversion)
+### Adapter Layer
 
-#### [NEW] [OrderDashboardActivity.java](file:///E:/Android/Android/SCM/app/src/main/java/com/project/scm/OrderDashboardActivity.java)
-- Port logic from `OrderDashboardActivity.kt`.
-- Implement `EdgeToEdge` and `WindowInsetsListener` in Java.
-- Setup button listeners and navigation.
+#### [MODIFY] [RecommendedProductAdapter.java](file:///E:/Android/Android/SCM/app/src/main/java/com/project/scm/adaptor/RecommendedProductAdapter.java)
+- Update Glide's `load()` method to use the full image path by prepending `ApiClient.IMAGE_URL` to the product's image filename.
+- Add a check to handle cases where the backend might return a full URL or just a filename.
 
-#### [NEW] [TrackingDashboardActivity.java](file:///E:/Android/Android/SCM/app/src/main/java/com/project/scm/TrackingDashboardActivity.java)
-- Port logic from `TrackingDashboardActivity.kt`.
-- Implement navigation and UI setup in Java.
-
-#### [NEW] [BillingPage.java](file:///E:/Android/Android/SCM/app/src/main/java/com/project/scm/BillingPage.java)
-- Port logic from `BillingPage.kt`.
-
-#### [NEW] [SupportDesk.java](file:///E:/Android/Android/SCM/app/src/main/java/com/project/scm/SupportDesk.java)
-- Port logic from `SupportDesk.kt`.
-- Implement `TextWatcher` for the character counter in Java.
-
-### Cleanup
-
-#### [DELETE] All `.kt` files
-- Remove `OrderDashboardActivity.kt`, `TrackingDashboardActivity.kt`, `BillingPage.kt`, and `SupportDesk.kt`.
-
-#### [MODIFY] [build.gradle](file:///E:/Android/Android/SCM/app/build.gradle)
-- (Optional) Remove Kotlin-specific plugins and dependencies if no longer needed.
+### Model Layer (Optional Research)
+- Verify if `ProductResponseDTO` fields are being correctly populated from the API.
 
 ## Verification Plan
 
 ### Automated Tests
-- Run `gradle_build assembleDebug` to ensure the project compiles successfully after conversion.
+- Run `gradle_build assembleDebug` to ensure no regressions.
 
 ### Manual Verification
-- Verify navigation between all screens (Dashboard -> Orders -> Tracking -> Billing -> Support).
-- Confirm character counting in Support Desk works.
-- Check that edge-to-edge layout remains correct.
+- Deploy the app and check the "Recommended For You" section.
+- Verify that if the server provides different image filenames, Glide loads them uniquely.
+- Check that the placeholder only appears during loading or on error.

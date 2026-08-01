@@ -21,6 +21,8 @@ public class ApiClient {
     // Real Device
     // private static final String BASE_URL = "http://192.168.88.250:8085/";
 
+    public static final String IMAGE_URL = "http://10.0.2.2:8085/images/";
+
     private static Retrofit retrofit;
 
     public static ApiService getClient(Context context) {

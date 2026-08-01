@@ -137,6 +137,7 @@
                             android:contentDescription="Scan Icon" />
 
                         <EditText
+                            android:id="@+id/etTrackId"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -148,6 +149,7 @@
                             android:autofillHints="none" />
 
                         <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnTrackNow"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Track Now"
