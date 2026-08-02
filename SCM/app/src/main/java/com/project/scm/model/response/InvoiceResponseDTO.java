@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class InvoiceResponseDTO {
+
     private Long id;
     private String invoiceNumber;
     private Long customerOrderId;
@@ -32,4 +33,6 @@ public class InvoiceResponseDTO {
     private String createdAt;
     private String updatedAt;
     private String cancelledAt;
+
+
 }

@@ -2,18 +2,25 @@ package com.project.scm;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.project.scm.adaptor.OrderAdapter;
 import com.project.scm.adaptor.PipelineAdapter;
 import com.project.scm.adaptor.RecommendedProductAdapter;
+import com.project.scm.api.ApiClient;
 import com.project.scm.model.response.CustomerOrderResponseDTO;
+import com.project.scm.model.response.CustomerResponseDTO;
+import com.project.scm.model.response.LoginResponseDTO;
 import com.project.scm.model.response.ProductResponseDTO;
 import com.project.scm.session.SessionManager;
 import androidx.annotation.NonNull;
@@ -23,11 +30,14 @@ import java.util.List;
 
 public class Dashboard_Activity extends AppCompatActivity {
 
+    private ImageView profile;
+
     // Welcome Card views
     private TextView welcomeTitleName;
 
     // Wallet & Payments views
-    private TextView totalBalance;
+    private TextView wallerBalance;
+    private TextView duePayment;
 
     // Stats Bar Grid views
     private TextView totalOrdersCount;
@@ -55,6 +65,7 @@ public class Dashboard_Activity extends AppCompatActivity {
     private TextView findAllOrder;
 
     private SessionManager sessionManager;
+    private CustomerResponseDTO customer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,9 +86,11 @@ public class Dashboard_Activity extends AppCompatActivity {
     }
 
     private void bindViews() {
+        profile=findViewById(R.id.profile);
         welcomeTitleName = findViewById(R.id.welcomeTitleName);
 
-        totalBalance = findViewById(R.id.totalBalance);
+        wallerBalance = findViewById(R.id.wallerBalance);
+        duePayment=findViewById(R.id.duePayment);
 
         totalOrdersCount = findViewById(R.id.totalOrdersCount);
         activeOrder = findViewById(R.id.activeOrder);
@@ -164,10 +177,130 @@ public class Dashboard_Activity extends AppCompatActivity {
         });
     }
 
+//    private void loadUserData() {
+//        System.out.println("#########################################################");
+//
+//        SessionManager s = new SessionManager(getApplicationContext());
+//
+//
+//
+//        if (s.getCustomer() != null) {
+//            CustomerResponseDTO customer = s.getCustomer();
+//
+//
+//            if (customer.getImage() != null && !customer.getImage().isEmpty()) {
+//                String imageUrl = ApiClient.IMAGE_URL + "customer/" + customer.getImage();
+//                System.out.println(imageUrl+"**************************************************");
+//
+//                Glide.with(this)
+//                        .load(imageUrl)
+//                        .placeholder(android.R.drawable.sym_def_app_icon)
+//                        .error(android.R.drawable.sym_def_app_icon)
+//                        .circleCrop()
+//                        .into(profile);
+//            } else {
+//                profile.setImageResource(android.R.drawable.sym_def_app_icon);
+//            }
+//        } else {
+//            profile.setImageResource(android.R.drawable.sym_def_app_icon);
+//            System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+//        }
+//
+//        if (welcomeTitleName != null) {
+//            LoginResponseDTO user = sessionManager.getUser();
+//            if (user != null && user.getName() != null) {
+//                welcomeTitleName.setText("Welcome back, " + user.getName());
+//            } else if (sessionManager.getCustomer() != null && sessionManager.getCustomer().getName() != null) {
+//                welcomeTitleName.setText("Welcome back, sessionManager.getCustomer().getName()"); // ঠিক করে নিচের লাইনটি ব্যবহার করুন
+//                welcomeTitleName.setText("Welcome back, " + sessionManager.getCustomer().getName());
+//            } else {
+//                welcomeTitleName.setText("Welcome back, Customer");
+//            }
+//        }
+//    }
+
     private void loadUserData() {
-        if (sessionManager.getCustomer() != null && welcomeTitleName != null) {
-            welcomeTitleName.setText("Welcome Back, " + sessionManager.getCustomer().getName() + "!");
+
+        System.out.println("#########################################################");
+
+        SessionManager sessionManager =
+                new SessionManager(getApplicationContext());
+        if(sessionManager.getCustomer() != null){
+            customer = sessionManager.getCustomer();
+        } else {
+            Toast.makeText(getApplicationContext(), "failed", Toast.LENGTH_SHORT).show();
+
         }
+
+        LoginResponseDTO user = sessionManager.getUser();
+
+        // =====================================================
+        // PROFILE IMAGE
+        // =====================================================
+
+       try {
+           if (customer != null) {
+               Toast.makeText(getApplicationContext(), customer.toString(), Toast.LENGTH_SHORT).show();
+               String imageUrl =
+                       ApiClient.IMAGE_URL
+                               + "customer/"
+                               + customer.getImage();
+
+               System.out.println("Customer Image = " + customer.getImage());
+               System.out.println("Image URL = " + imageUrl);
+
+               Glide.with(this)
+                       .load(imageUrl)
+                       .placeholder(android.R.drawable.sym_def_app_icon)
+                       .error(android.R.drawable.sym_def_app_icon)
+                       .circleCrop()
+                       .into(profile);
+
+           } else {
+
+               profile.setImageResource(
+                       android.R.drawable.sym_def_app_icon
+               );
+
+
+           }
+       } catch (Exception e) {
+           Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
+       }
+
+
+
+        // =====================================================
+        // WELCOME NAME
+        // =====================================================
+
+        if (welcomeTitleName != null) {
+
+            if (user != null
+                    && user.getName() != null
+                    && !user.getName().isEmpty()) {
+
+                welcomeTitleName.setText(
+                        "Welcome back, " + user.getName()
+                );
+
+            } else if (customer != null
+                    && customer.getName() != null
+                    && !customer.getName().isEmpty()) {
+
+                welcomeTitleName.setText(
+                        "Welcome back, " + customer.getName()
+                );
+
+            } else {
+
+                welcomeTitleName.setText(
+                        "Welcome back, Customer"
+                );
+            }
+        }
+
+
     }
 
     private void loadRecentOrder() {
@@ -205,7 +338,6 @@ public class Dashboard_Activity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull retrofit2.Call<List<ProductResponseDTO>> call, @NonNull Throwable t) {
-                // Handle failure
             }
         });
     }
@@ -213,10 +345,21 @@ public class Dashboard_Activity extends AppCompatActivity {
     private void calculateAndShowStats(List<CustomerOrderResponseDTO> orders) {
         if (orders == null) return;
         int activeCount = 0, deliveredCount = 0, pendingCount = 0;
-        double totalBalanceValue = 0;
+        double totalBalanceValue = 0;double totalDueValue = 0;
 
         for (CustomerOrderResponseDTO order : orders) {
-            totalBalanceValue += order.getTotalAmount();
+
+            if ("PAID".equals(order.getPaymentStatus())) {
+                totalBalanceValue += order.getTotalAmount();
+            }else {
+                if (order.getDueAmount() != null) {
+                    try {
+                        totalDueValue += Double.parseDouble(order.getDueAmount());
+                    } catch (NumberFormatException e) {
+                    }
+                }
+            }
+
             String status = order.getStatus();
             if (status != null) {
                 switch (status) {
@@ -229,8 +372,9 @@ public class Dashboard_Activity extends AppCompatActivity {
                 }
             }
         }
-        
-        if (totalBalance != null) totalBalance.setText(String.format(java.util.Locale.getDefault(), "৳%.2f", totalBalanceValue));
+
+        if (wallerBalance != null) wallerBalance.setText(String.format(java.util.Locale.getDefault(), "৳%.2f", totalBalanceValue));
+        if (duePayment != null) duePayment.setText(String.format(java.util.Locale.getDefault(), "৳%.2f", totalDueValue));
         if (totalOrdersCount != null) totalOrdersCount.setText(String.valueOf(orders.size()));
         if (activeOrder != null) activeOrder.setText(String.valueOf(activeCount));
         if (deliveredValue != null) deliveredValue.setText(String.valueOf(deliveredCount));
@@ -242,8 +386,8 @@ public class Dashboard_Activity extends AppCompatActivity {
         pipelineList.clear();
         for (CustomerOrderResponseDTO order : orders) {
             String status = order.getStatus();
-            if (status != null && (status.equals("CONFIRMED") || status.equals("PROCESSING") || 
-                status.equals("SHIPPED") || status.equals("OUT_FOR_DELIVERY") || status.equals("DELIVERED"))) {
+            if (status != null && (status.equals("CONFIRMED") || status.equals("PROCESSING") ||
+                    status.equals("SHIPPED") || status.equals("OUT_FOR_DELIVERY") || status.equals("DELIVERED"))) {
                 pipelineList.add(order);
             }
         }

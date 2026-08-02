@@ -12,8 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputEditText;
 
 import com.project.scm.model.request.LoginRequestDTO;
+import com.project.scm.model.response.CustomerResponseDTO;
 import com.project.scm.model.response.LoginResponseDTO;
 import com.project.scm.repository.AuthRepository;
+import com.project.scm.repository.CustomerRepository;
 import com.project.scm.session.SessionManager;
 
 import java.util.Objects;
@@ -27,6 +29,7 @@ public class Login_Activity extends AppCompatActivity {
     private Button loginBtn;
     private TextInputEditText emailTxt, passwordTxt;
     private AuthRepository authRepository;
+    private CustomerRepository customerRepository;
     private SessionManager sessionManager;
 
     @Override
@@ -38,6 +41,7 @@ public class Login_Activity extends AppCompatActivity {
         bindView();
 
         authRepository = new AuthRepository(this);
+        customerRepository = new CustomerRepository(this);
         sessionManager = new SessionManager(this);
 
         loginBtn.setOnClickListener(v -> login());
@@ -71,6 +75,8 @@ public class Login_Activity extends AppCompatActivity {
         dto.setEmail(email);
         dto.setPassword(password);
 
+        loginBtn.setEnabled(false);
+
         authRepository.login(dto, new Callback<LoginResponseDTO>() {
             @Override
             public void onResponse(@NonNull Call<LoginResponseDTO> call, @NonNull Response<LoginResponseDTO> response) {
@@ -78,21 +84,53 @@ public class Login_Activity extends AppCompatActivity {
                     LoginResponseDTO responseDTO = response.body();
                     sessionManager.saveUser(responseDTO);
                     sessionManager.saveToken(responseDTO.getToken());
-                    Toast.makeText(getApplicationContext(), "Logged in successfully", Toast.LENGTH_SHORT).show();
-
-                    Intent intent = new Intent(Login_Activity.this, Dashboard_Activity.class);
-                    startActivity(intent);
-                    finish();
+                    
+                    // Now fetch customer profile before navigating
+                    getCustomer(responseDTO.getUserId());
+                    
                 } else {
+                    loginBtn.setEnabled(true);
                     Toast.makeText(getApplicationContext(), "Login failed: Invalid credentials", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<LoginResponseDTO> call, @NonNull Throwable t) {
+                loginBtn.setEnabled(true);
                 Toast.makeText(getApplicationContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
+    }
+
+    private void getCustomer(Long id){
+        customerRepository.getCustomerByUserId(id, new Callback<CustomerResponseDTO>() {
+            @Override
+            public void onResponse(@NonNull Call<CustomerResponseDTO> call, @NonNull Response<CustomerResponseDTO> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    CustomerResponseDTO ct = response.body();
+                    sessionManager.saveCustomer(ct);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Failed to fetch profile data", Toast.LENGTH_SHORT).show();
+                }
+                
+                // Navigate to dashboard regardless of whether profile fetch succeeded 
+                // (as long as login was successful)
+                navigateToDashboard();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<CustomerResponseDTO> call, @NonNull Throwable throwable) {
+                Toast.makeText(getApplicationContext(), "Network error while fetching profile", Toast.LENGTH_SHORT).show();
+                navigateToDashboard();
+            }
+        });
+    }
+
+    private void navigateToDashboard() {
+        Toast.makeText(getApplicationContext(), "Logged in successfully", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(Login_Activity.this, Dashboard_Activity.class);
+        startActivity(intent);
+        finish();
     }
 }

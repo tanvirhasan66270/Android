@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
         logo.postDelayed(() -> {
             Class<?> targetActivity = new SessionManager(this).isLoggedIn()
-                ? Dashboard_Activity.class 
+                ? Dashboard_Activity.class
                 : Login_Activity.class;
 
             Intent intent = new Intent(getApplicationContext(), targetActivity);

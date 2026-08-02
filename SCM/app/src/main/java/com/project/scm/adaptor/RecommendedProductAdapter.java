@@ -51,7 +51,7 @@ public class RecommendedProductAdapter extends RecyclerView.Adapter<RecommendedP
         Glide.with(holder.itemView.getContext()).clear(holder.productImage);
 
         if (product.getImage() != null && !product.getImage().isEmpty()) {
-            String imageUrl = ApiClient.IMAGE_URL + product.getImage();
+            String imageUrl = ApiClient.IMAGE_URL+"product/" + product.getImage();
             Glide.with(holder.itemView.getContext())
                     .load(imageUrl)
                     .placeholder(R.drawable.baground) // Temporary truck during load

@@ -6,6 +6,7 @@ import lombok.Data;
 
 @Data
 public class CustomerOrderResponseDTO {
+
     private Long id;
     private String orderNumber;
     private Long customerId;
