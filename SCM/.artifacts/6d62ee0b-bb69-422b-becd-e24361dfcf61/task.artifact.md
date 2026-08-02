@@ -1,5 +1,8 @@
-- [ ] Create `item_pipeline_log.xml` for log entries
-- [ ] Create `PipelineAdapter.java` to manage the pipeline list
-- [ ] Update `activity_dashboard.xml` with `RecyclerView` and placeholder container
-- [ ] Update `Dashboard_Activity.java` to filter orders and populate the pipeline
-- [ ] Verify functionality with a build
+- [x] Create `item_timeline_step.xml` template
+- [x] Update `activity_tracking_dashboard.xml`
+    - [x] Add `ivMilestonePointer` to horizontal pipeline
+    - [x] Add `containerTimeline` and remove static items
+- [x] Update `TrackingDashboardActivity.java`
+    - [x] Implement `updateMilestonePointer`
+    - [x] Implement `populateVerticalTimeline`
+- [x] Final verification

@@ -1,29 +1,46 @@
-# Implementation Plan - Unique Product Images
+# Implementation Plan - Dynamic Milestone Pipeline & Vertical Timeline
 
-The goal is to ensure each product in the "Recommended For You" section displays its own unique image instead of a common hardcoded one.
-
-## User Review Required
-
-> [!IMPORTANT]
-> The app currently uses a hardcoded drawable (`baground.png`) as a fallback when a product image is missing or the path is incorrect. To fix this, the backend must provide unique image paths, and the app must correctly append the base image URL.
+Make the "MILESTONE PROGRESS PIPELINE" and "ORDER PROCESSING UPDATE" sections in `TrackingDashboardActivity` fully dynamic based on the order status.
 
 ## Proposed Changes
 
-### Adapter Layer
+### Layout Layer
 
-#### [MODIFY] [RecommendedProductAdapter.java](file:///E:/Android/Android/SCM/app/src/main/java/com/project/scm/adaptor/RecommendedProductAdapter.java)
-- Update Glide's `load()` method to use the full image path by prepending `ApiClient.IMAGE_URL` to the product's image filename.
-- Add a check to handle cases where the backend might return a full URL or just a filename.
+#### [MODIFY] [activity_tracking_dashboard.xml](file:///E:/Android/Android/SCM/app/src/main/res/layout/activity_tracking_dashboard.xml)
+- **Horizontal Stepper**:
+    - Add a Pin/Indicator icon (`ivMilestonePointer`) above the labels.
+    - Use `ConstraintLayout` to position the pointer dynamically using `bias`.
+- **Vertical Timeline**:
+    - Replace the static "Timeline Item 1" with a `LinearLayout` (`containerTimeline`) to add steps dynamically.
+    - Remove the hardcoded placeholder text.
 
-### Model Layer (Optional Research)
-- Verify if `ProductResponseDTO` fields are being correctly populated from the API.
+#### [NEW] [item_timeline_step.xml](file:///E:/Android/Android/SCM/app/src/main/res/layout/item_timeline_step.xml)
+- Create a template layout for a single vertical timeline step.
+- Includes: Icon, Title, Description, Date/Time, and a vertical line for continuity.
+
+### Activity Layer
+
+#### [MODIFY] [TrackingDashboardActivity.java](file:///E:/Android/Android/SCM/app/src/main/java/com/project/scm/TrackingDashboardActivity.java)
+- **Status Mapping Logic**:
+    - Define an internal list of milestones: `PENDING`, `CONFIRMED`, `PROCESSING`, `SHIPPED`, `DELIVERED`.
+- **Horizontal Update**:
+    - Implement `updateMilestonePointer(String status)` to move the pin to the correct horizontal position (0% to 100% bias).
+- **Vertical Update**:
+    - Implement `populateVerticalTimeline(String currentStatus, String date)` to clear the container and add all completed and current steps.
+    - Style active/completed steps in green and future steps in gray.
 
 ## Verification Plan
 
 ### Automated Tests
-- Run `gradle_build assembleDebug` to ensure no regressions.
+- Run `gradle_build assembleDebug` to ensure layout changes don't break the build.
 
 ### Manual Verification
-- Deploy the app and check the "Recommended For You" section.
-- Verify that if the server provides different image filenames, Glide loads them uniquely.
-- Check that the placeholder only appears during loading or on error.
+- Track an order with status `SHIPPED`.
+- Verify the horizontal pin is over the "Shipped" label.
+- Verify the vertical timeline shows:
+    1. Order Placed (Green/Completed)
+    2. Order Confirmed (Green/Completed)
+    3. Processing (Green/Completed)
+    4. Shipped (Green/Active)
+- Track an order with status `PENDING`.
+- Verify only "Order Placed" shows in the vertical timeline and the horizontal pin is at the start.

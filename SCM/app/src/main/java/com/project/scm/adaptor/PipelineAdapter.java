@@ -22,10 +22,16 @@ import java.util.Locale;
 
 public class PipelineAdapter extends RecyclerView.Adapter<PipelineAdapter.PipelineViewHolder> {
 
-    private final List<CustomerOrderResponseDTO> pipelineList;
+    public interface OnPipelineClickListener {
+        void onPipelineClick(CustomerOrderResponseDTO order);
+    }
 
-    public PipelineAdapter(List<CustomerOrderResponseDTO> pipelineList) {
+    private final List<CustomerOrderResponseDTO> pipelineList;
+    private final OnPipelineClickListener listener;
+
+    public PipelineAdapter(List<CustomerOrderResponseDTO> pipelineList, OnPipelineClickListener listener) {
         this.pipelineList = pipelineList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -68,6 +74,12 @@ public class PipelineAdapter extends RecyclerView.Adapter<PipelineAdapter.Pipeli
             bg.setStroke(2, color);
             holder.tvStatus.setTextColor(color);
         }
+
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onPipelineClick(order);
+            }
+        });
     }
 
     @Override
@@ -81,7 +93,8 @@ public class PipelineAdapter extends RecyclerView.Adapter<PipelineAdapter.Pipeli
     }
 
     private int getStatusColor(String status) {
-        switch (status) {
+        if (status == null) return Color.GRAY;
+        switch (status.toUpperCase()) {
             case "CONFIRMED": return Color.parseColor("#4F46E5"); // Indigo
             case "PROCESSING": return Color.parseColor("#0288D1"); // Light Blue
             case "SHIPPED": return Color.parseColor("#F59E0B"); // Amber

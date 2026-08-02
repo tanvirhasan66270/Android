@@ -114,6 +114,7 @@ public class Dashboard_Activity extends AppCompatActivity {
             recyclerRecentOrders.setHasFixedSize(true);
             orderAdapter = new OrderAdapter(orderList, order -> {
                 Intent intent = new Intent(Dashboard_Activity.this, TrackingDashboardActivity.class);
+                intent.putExtra("orderNumber", order.getOrderNumber());
                 startActivity(intent);
             });
             recyclerRecentOrders.setAdapter(orderAdapter);
@@ -121,7 +122,11 @@ public class Dashboard_Activity extends AppCompatActivity {
 
         if (recyclerPipelineLogs != null) {
             recyclerPipelineLogs.setLayoutManager(new LinearLayoutManager(this));
-            pipelineAdapter = new PipelineAdapter(pipelineList);
+            pipelineAdapter = new PipelineAdapter(pipelineList, order -> {
+                Intent intent = new Intent(Dashboard_Activity.this, TrackingDashboardActivity.class);
+                intent.putExtra("orderNumber", order.getOrderNumber());
+                startActivity(intent);
+            });
             recyclerPipelineLogs.setAdapter(pipelineAdapter);
         }
 
@@ -221,7 +226,6 @@ public class Dashboard_Activity extends AppCompatActivity {
 
     private void loadUserData() {
 
-        System.out.println("#########################################################");
 
         SessionManager sessionManager =
                 new SessionManager(getApplicationContext());
