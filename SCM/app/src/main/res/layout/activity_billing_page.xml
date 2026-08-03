@@ -127,7 +127,7 @@
                             android:id="@+id/tvBalanceAmount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="৳209,990.00"
+                            android:text="৳0.00"
                             android:textColor="@color/green_issued"
                             android:textSize="28sp"
                             android:textStyle="bold"
@@ -135,13 +135,14 @@
                             app:layout_constraintTop_toBottomOf="@id/tvBalanceLabel" />
 
                         <TextView
+                            android:id="@+id/tvBalanceStatusBadge"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:background="@drawable/bg_status_badge_partially_paid"
                             android:paddingHorizontal="12dp"
                             android:paddingVertical="4dp"
-                            android:text="PARTIALLY PAID"
+                            android:text="ACTIVE LEDGER"
                             android:textColor="@color/orange_partially_paid"
                             android:textSize="10sp"
                             android:textStyle="bold"
@@ -181,7 +182,7 @@
                             android:gravity="center"
                             android:orientation="vertical">
                             <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_invoice" android:contentDescription="Invoice" />
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="1" android:textStyle="bold" />
+                            <TextView android:id="@+id/tvInvoiceCount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="0" android:textStyle="bold" />
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Invoices" android:textSize="8sp" />
                         </LinearLayout>
 
@@ -192,7 +193,7 @@
                             android:gravity="center"
                             android:orientation="vertical">
                             <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_nav_payments" app:tint="@color/blue_primary" android:contentDescription="Total" />
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="৳211k" android:textStyle="bold" />
+                            <TextView android:id="@+id/tvTotalAmountSum" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="৳0" android:textStyle="bold" />
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Total" android:textSize="8sp" />
                         </LinearLayout>
 
@@ -203,7 +204,7 @@
                             android:gravity="center"
                             android:orientation="vertical">
                             <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_due" app:tint="@color/green_status" android:contentDescription="Paid" />
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="৳2k" android:textStyle="bold" />
+                            <TextView android:id="@+id/tvPaidAmountSum" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="৳0" android:textStyle="bold" />
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Paid" android:textSize="8sp" />
                         </LinearLayout>
 
@@ -214,7 +215,7 @@
                             android:gravity="center"
                             android:orientation="vertical">
                             <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_due" app:tint="@color/red_status" android:contentDescription="Due" />
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="৳209k" android:textStyle="bold" />
+                            <TextView android:id="@+id/tvDueAmountSum" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="৳0" android:textStyle="bold" />
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Due" android:textSize="8sp" />
                         </LinearLayout>
 
@@ -238,10 +239,11 @@
                     android:paddingHorizontal="12dp">
                     <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_search_product" android:contentDescription="Search" />
                     <EditText
+                        android:id="@+id/etSearchInvoice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
-                        android:hint="Search by invoice ID..."
+                        android:hint="Search by invoice number or name..."
                         android:padding="8dp"
                         android:textSize="14sp"
                         android:inputType="text"
@@ -249,6 +251,7 @@
                 </LinearLayout>
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnFilter"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
@@ -257,7 +260,7 @@
                     app:icon="@drawable/ic_filter" />
             </LinearLayout>
 
-            <!-- Invoice List -->
+            <!-- Invoice Header & List -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -273,112 +276,59 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
                 <TextView
+                    android:id="@+id/tvFilterStatusLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Sort by: Latest ▼"
+                    android:text="Filter: All"
                     android:textColor="@color/gray_text"
                     android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <!-- Invoice Item 1 -->
-            <com.google.android.material.card.MaterialCardView
+            <!-- RecyclerView for Invoices -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvInvoices"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="12dp">
+                android:nestedScrollingEnabled="false"
+                tools:listitem="@layout/item_invoice" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+            <!-- Empty State Container -->
+            <LinearLayout
+                android:id="@+id/layoutEmptyState"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:src="@drawable/ic_invoice"
+                    app:tint="@color/gray_light"
+                    android:contentDescription="Empty Invoices" />
+
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
+                    android:layout_marginTop="12dp"
+                    android:text="No Invoices Found"
+                    android:textColor="@color/text_main"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <ImageView
-                            android:id="@+id/ivInv1"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:background="@drawable/bg_status_badge_paid"
-                            android:backgroundTint="@color/blue_soft_bg"
-                            android:padding="10dp"
-                            android:src="@drawable/ic_invoice"
-                            android:contentDescription="Invoice Icon"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            android:orientation="vertical"
-                            app:layout_constraintBottom_toBottomOf="@id/ivInv1"
-                            app:layout_constraintStart_toEndOf="@id/ivInv1"
-                            app:layout_constraintTop_toTopOf="@id/ivInv1">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="TRN-1783596295721" android:textStyle="bold" />
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="ID: 2" android:textSize="10sp" android:textColor="@color/gray_text" />
-                        </LinearLayout>
-                        <TextView
-                            android:id="@+id/tvStatus1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/bg_status_badge_partially_paid"
-                            android:paddingHorizontal="8dp"
-                            android:paddingVertical="4dp"
-                            android:text="PARTIALLY PAID"
-                            android:textColor="@color/orange_partially_paid"
-                            android:textSize="10sp"
-                            android:textStyle="bold"
-                            app:layout_constraintEnd_toStartOf="@id/ivArrow1"
-                            app:layout_constraintTop_toTopOf="parent"
-                            android:layout_marginEnd="8dp" />
-                        <ImageView
-                            android:id="@+id/ivArrow1"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/ic_chevron_right"
-                            android:contentDescription="Go to Details"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginVertical="12dp" android:background="@color/gray_light" />
-
-                    <GridLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:columnCount="3">
-                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Customer" android:textSize="10sp" android:textColor="@color/gray_text" />
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Rashed Khan" android:textStyle="bold" android:textSize="12sp" />
-                        </LinearLayout>
-                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical" android:gravity="center_horizontal">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Order ID" android:textSize="10sp" android:textColor="@color/gray_text" />
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="ORD-1" android:background="@drawable/bg_status_badge_paid" android:backgroundTint="@color/blue_soft_bg" android:paddingHorizontal="8dp" android:textSize="11sp" android:textColor="@color/blue_primary" />
-                        </LinearLayout>
-                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical" android:gravity="end">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Status" android:textSize="10sp" android:textColor="@color/gray_text" />
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="ISSUED" android:background="@drawable/bg_status_badge_issued" android:paddingHorizontal="6dp" android:textSize="10sp" android:textColor="@color/green_issued" />
-                        </LinearLayout>
-                    </GridLayout>
-
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:orientation="horizontal">
-                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Total Amount" android:textSize="10sp" android:textColor="@color/gray_text" />
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="৳211,990.00" android:textStyle="bold" />
-                        </LinearLayout>
-                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Paid Amount" android:textSize="10sp" android:textColor="@color/gray_text" />
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="৳2,000.00" android:textColor="@color/green_status" android:textStyle="bold" />
-                        </LinearLayout>
-                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="end">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Due Amount" android:textSize="10sp" android:textColor="@color/gray_text" />
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="৳209,990.00" android:textColor="@color/red_status" android:textStyle="bold" />
-                        </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="There are no billing records available at this time."
+                    android:textColor="@color/gray_text"
+                    android:textSize="12sp" />
+            </LinearLayout>
 
             <!-- Quick Actions Footer -->
             <LinearLayout
@@ -390,9 +340,13 @@
                 android:weightSum="4">
 
                 <LinearLayout
+                    android:id="@+id/btnDownloadStatement"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground"
                     android:gravity="center"
                     android:orientation="vertical">
                     <ImageView
@@ -407,9 +361,13 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/btnPaymentHistory"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground"
                     android:gravity="center"
                     android:orientation="vertical">
                     <ImageView
@@ -425,9 +383,13 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/btnFinancialSummary"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground"
                     android:gravity="center"
                     android:orientation="vertical">
                     <ImageView
@@ -443,9 +405,13 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/btnNewPayment"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground"
                     android:gravity="center"
                     android:orientation="vertical">
                     <ImageView

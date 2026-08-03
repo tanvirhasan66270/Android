@@ -133,18 +133,9 @@ public class Dashboard_Activity extends AppCompatActivity {
         if (recyclerRecommended != null) {
             recyclerRecommended.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
             recommendedProductAdapter = new RecommendedProductAdapter(recommendedProductList, product -> {
-                java.io.File pdfFile = com.project.scm.utils.PdfGenerator.generateProductPdf(this, product);
-                if (pdfFile != null && pdfFile.exists()) {
-                    android.net.Uri pdfUri = androidx.core.content.FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".fileprovider", pdfFile);
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setDataAndType(pdfUri, "application/pdf");
-                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    try {
-                        startActivity(intent);
-                    } catch (android.content.ActivityNotFoundException e) {
-                        android.widget.Toast.makeText(Dashboard_Activity.this, "No PDF Viewer found", android.widget.Toast.LENGTH_SHORT).show();
-                    }
-                }
+                Intent intent = new Intent(Dashboard_Activity.this, Product_Details_Activity.class);
+                intent.putExtra("product_data", new com.google.gson.Gson().toJson(product));
+                startActivity(intent);
             });
             recyclerRecommended.setAdapter(recommendedProductAdapter);
         }
