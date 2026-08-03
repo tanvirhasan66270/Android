@@ -76,8 +76,14 @@ public class BillingPage extends AppCompatActivity implements InvoiceAdapter.OnI
 
         ViewCompat.setOnApplyWindowInsetsListener(mainView, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            header.setPadding(header.getPaddingLeft(), systemBars.top, header.getPaddingRight(), header.getPaddingBottom());
-            bottomNav.setPadding(bottomNav.getPaddingLeft(), bottomNav.getPaddingTop(), bottomNav.getPaddingRight(), systemBars.bottom);
+            if (header != null) {
+                int standardHeight = (int) (56 * getResources().getDisplayMetrics().density);
+                header.getLayoutParams().height = standardHeight + systemBars.top;
+                header.setPadding(header.getPaddingLeft(), systemBars.top, header.getPaddingRight(), header.getPaddingBottom());
+            }
+            if (bottomNav != null) {
+                bottomNav.setPadding(bottomNav.getPaddingLeft(), bottomNav.getPaddingTop(), bottomNav.getPaddingRight(), systemBars.bottom);
+            }
             return insets;
         });
 
@@ -153,10 +159,6 @@ public class BillingPage extends AppCompatActivity implements InvoiceAdapter.OnI
         findViewById(R.id.btn_nav_profile).setOnClickListener(v -> {
             startActivity(new Intent(this, SupportDesk.class));
             finish();
-        });
-
-        findViewById(R.id.btnMenu).setOnClickListener(v -> {
-            Toast.makeText(this, "Menu Options", Toast.LENGTH_SHORT).show();
         });
 
         loadInvoices();

@@ -61,10 +61,6 @@
         </provider>
 
         <activity
-            android:name=".Product_Details"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
             android:name=".Product_Details_Activity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />

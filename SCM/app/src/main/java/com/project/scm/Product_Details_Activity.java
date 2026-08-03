@@ -1,5 +1,6 @@
 package com.project.scm;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -34,12 +35,21 @@ public class Product_Details_Activity extends AppCompatActivity {
         
         View mainView = findViewById(R.id.main);
         View header = findViewById(R.id.header);
+        View btnHome = findViewById(R.id.btnHome);
         
         ViewCompat.setOnApplyWindowInsetsListener(mainView, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            header.setPadding(header.getPaddingLeft(), systemBars.top, header.getPaddingRight(), header.getPaddingBottom());
+            header.setPadding(header.getPaddingLeft(), systemBars.top, header.getPaddingRight(),
+                    header.getPaddingBottom());
             return insets;
         });
+
+        if (btnHome != null) {
+            btnHome.setOnClickListener(v -> {
+                startActivity(new Intent(this, Dashboard_Activity.class));
+                finish();
+            });
+        }
 
         String productJson = getIntent().getStringExtra("product_data");
         if (productJson != null) {
@@ -57,7 +67,8 @@ public class Product_Details_Activity extends AppCompatActivity {
         // Basic Info (Hero Section)
         setDetailItem(R.id.itemCode, R.drawable.ic_copy, "Product Code", product.getProductCode());
         setDetailItem(R.id.itemName, R.drawable.ic_package, "Name", product.getName());
-        setDetailItem(R.id.itemCategory, R.drawable.ic_ledger, "Category", product.getCategoryName() + " (ID: " + product.getCategoryId() + ")");
+        setDetailItem(R.id.itemCategory, R.drawable.ic_ledger, "Category", product.getCategoryName()
+                + " (ID: " + product.getCategoryId() + ")");
         setDetailItem(R.id.itemUnit, R.drawable.ic_cart, "Unit", product.getUnit());
 
         // Status Badge
@@ -65,21 +76,48 @@ public class Product_Details_Activity extends AppCompatActivity {
         View viewStatusDot = findViewById(R.id.viewStatusDot);
         if (product.isActive()) {
             tvStatusText.setText("Active Product");
-            viewStatusDot.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0xFF549934));
+            viewStatusDot.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0xFF549934)); // Green
         } else {
             tvStatusText.setText("Inactive Product");
-            viewStatusDot.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0xFFEA4335));
+            viewStatusDot.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0xFFEA4335)); // Red
         }
 
         // Product Information Table
-        setInfoRow(R.id.rowQuantity, R.drawable.ic_shopping_bag, "Quantity", String.valueOf(product.getQuantity()));
-        setInfoRow(R.id.rowWeight, R.drawable.ic_gear, "Weight", product.getWeight() + " kg");
-        setInfoRow(R.id.rowUnitCost, R.drawable.ic_wallet, "Unit Cost", "৳" + String.format(Locale.getDefault(), "%,.2f", product.getUnitCost()));
-        setInfoRow(R.id.rowSellingPrice, R.drawable.ic_due, "Selling Price", "৳" + String.format(Locale.getDefault(), "%,.2f", product.getSellingPrice()));
+        setInfoRow(R.id.rowQuantity, R.drawable.ic_warehouse, "Quantity", String.valueOf(product.getQuantity()));
+        setInfoRow(R.id.rowWeight, R.drawable.ic_gear, "Weight", String.format(
+                Locale.getDefault(), "%.1f", product.getWeight()));
+        setInfoRow(R.id.rowUnitCost, R.drawable.ic_wallet, "Unit Cost", "৳"
+                + String.format(Locale.getDefault(), "%,.1f", product.getUnitCost()));
+        setInfoRow(R.id.rowSellingPrice, R.drawable.ic_cart, "Selling Price", "৳"
+                + String.format(Locale.getDefault(), "%,.1f", product.getSellingPrice()));
         setInfoRow(R.id.rowReorderPoint, R.drawable.ic_sync, "Reorder Point", String.valueOf(product.getReorderPoint()));
-        setInfoRow(R.id.rowAvailability, R.drawable.ic_check_circle, "Availability", product.getAvailability());
-        setInfoRow(R.id.rowExpiry, R.drawable.ic_bell, "Has Expiry Date", product.getHasExpiryDate());
-        setInfoRow(R.id.rowActive, R.drawable.ic_logout, "Active Status", product.isActive() ? "Active" : "Inactive");
+        
+        // Dynamic Availability Styling
+        TextView tvAvailValue = findViewById(R.id.rowAvailability).findViewById(R.id.tvRowValue);
+        ((ImageView) findViewById(R.id.rowAvailability).findViewById(R.id.ivRowIcon)).setImageResource(R.drawable.ic_check_circle);
+        ((TextView) findViewById(R.id.rowAvailability).findViewById(R.id.tvRowLabel)).setText("Availability");
+        tvAvailValue.setText(product.getAvailability() != null ? product.getAvailability().toUpperCase() : "N/A");
+        if ("AVAILABLE".equalsIgnoreCase(product.getAvailability())) {
+            tvAvailValue.setTextColor(0xFF15803D); // Dark Green
+        }
+
+        // Dynamic Expiry Styling
+        TextView tvExpiryValue = findViewById(R.id.rowExpiry).findViewById(R.id.tvRowValue);
+        ((ImageView) findViewById(R.id.rowExpiry).findViewById(R.id.ivRowIcon)).setImageResource(R.drawable.ic_bell);
+        ((TextView) findViewById(R.id.rowExpiry).findViewById(R.id.tvRowLabel)).setText("Has Expiry Date");
+        tvExpiryValue.setText(product.getHasExpiryDate() != null ? product.getHasExpiryDate().toUpperCase() : "N/A");
+        if ("NO".equalsIgnoreCase(product.getHasExpiryDate())) {
+            tvExpiryValue.setTextColor(0xFFEA4335); // Red
+        } else if ("YES".equalsIgnoreCase(product.getHasExpiryDate())) {
+            tvExpiryValue.setTextColor(0xFF15803D); // Green
+        }
+
+        // Dynamic Active Status Styling
+        TextView tvActiveValue = findViewById(R.id.rowActive).findViewById(R.id.tvRowValue);
+        ((ImageView) findViewById(R.id.rowActive).findViewById(R.id.ivRowIcon)).setImageResource(R.drawable.ic_logout);
+        ((TextView) findViewById(R.id.rowActive).findViewById(R.id.tvRowLabel)).setText("Active Status");
+        tvActiveValue.setText(product.isActive() ? "Active" : "Inactive");
+        tvActiveValue.setTextColor(product.isActive() ? 0xFF15803D : 0xFFEA4335);
 
         // Product Image
         ImageView ivProductImage = findViewById(R.id.ivProductImage);
@@ -108,12 +146,12 @@ public class Product_Details_Activity extends AppCompatActivity {
     }
 
     private void updateHeaderTimestamp() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
-        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a", Locale.getDefault());
+        SimpleDateFormat fullDateFormat = new SimpleDateFormat("dd MMM yyyy, hh:mm a", Locale.getDefault());
         Date now = new Date();
         
-        ((TextView) findViewById(R.id.tvHeaderDate)).setText(dateFormat.format(now));
-        ((TextView) findViewById(R.id.tvHeaderTime)).setText(timeFormat.format(now));
-        ((TextView) findViewById(R.id.tvFooterTimestamp)).setText(new SimpleDateFormat("dd MMM yyyy, hh:mm a", Locale.getDefault()).format(now));
+        TextView tvFooterTimestamp = findViewById(R.id.tvFooterTimestamp);
+        if (tvFooterTimestamp != null) {
+            tvFooterTimestamp.setText(fullDateFormat.format(now));
+        }
     }
 }

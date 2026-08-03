@@ -17,9 +17,12 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.bumptech.glide.Glide;
 import com.project.scm.api.ApiClient;
 import com.project.scm.api.ApiService;
 import com.project.scm.model.response.CustomerOrderResponseDTO;
+import com.project.scm.model.response.CustomerResponseDTO;
+import com.project.scm.session.SessionManager;
 
 import java.util.Locale;
 
@@ -34,7 +37,7 @@ public class TrackingDashboardActivity extends AppCompatActivity {
     private TextView tvRecipientName, tvPaymentStatus, tvEstimatedArrival, tvTotalValue;
     private TextView tvCurrentLocation, tvCourierName, tvServiceType, tvUpdateTime;
     private TextView tvDetailOrderNumber, tvWeightDetail, tvAddressDetail;
-    private ImageView ivMilestonePipeline, ivMilestonePointer;
+    private ImageView ivMilestonePipeline, ivMilestonePointer, ivProfileImage;
     private TextView tvMilestonePending, tvMilestoneConfirmed, tvMilestoneProcessing, tvMilestoneShipped, tvMilestoneDelivered;
     private android.widget.LinearLayout containerTimeline;
     private EditText etTrackId;
@@ -48,6 +51,7 @@ public class TrackingDashboardActivity extends AppCompatActivity {
         bindViews();
         setupInsets();
         setupNavigation();
+        loadUserData();
 
         findViewById(R.id.btnTrackNow).setOnClickListener(v -> {
             String trackId = etTrackId.getText().toString().trim();
@@ -89,6 +93,7 @@ public class TrackingDashboardActivity extends AppCompatActivity {
 
         ivMilestonePipeline = findViewById(R.id.ivMilestonePipeline);
         ivMilestonePointer = findViewById(R.id.ivMilestonePointer);
+        ivProfileImage = findViewById(R.id.ivProfileImage);
         tvMilestonePending = findViewById(R.id.tvMilestonePending);
         tvMilestoneConfirmed = findViewById(R.id.tvMilestoneConfirmed);
         tvMilestoneProcessing = findViewById(R.id.tvMilestoneProcessing);
@@ -105,14 +110,28 @@ public class TrackingDashboardActivity extends AppCompatActivity {
 
         ViewCompat.setOnApplyWindowInsetsListener(mainView, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            header.setPadding(header.getPaddingLeft(), systemBars.top, header.getPaddingRight(), header.getPaddingBottom());
-            bottomNav.setPadding(bottomNav.getPaddingLeft(), bottomNav.getPaddingTop(), bottomNav.getPaddingRight(), systemBars.bottom);
+            if (header != null) {
+                int standardHeight = (int) (56 * getResources().getDisplayMetrics().density);
+                header.getLayoutParams().height = standardHeight + systemBars.top;
+                header.setPadding(header.getPaddingLeft(), systemBars.top, header.getPaddingRight(), header.getPaddingBottom());
+            }
+            if (bottomNav != null) {
+                bottomNav.setPadding(bottomNav.getPaddingLeft(), bottomNav.getPaddingTop(), bottomNav.getPaddingRight(), systemBars.bottom);
+            }
             return insets;
         });
     }
 
     private void setupNavigation() {
-        findViewById(R.id.btnBack).setOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
+        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
+        
+        View btnHome = findViewById(R.id.btnHome);
+        if (btnHome != null) {
+            btnHome.setOnClickListener(v -> {
+                startActivity(new Intent(this, Dashboard_Activity.class));
+                finish();
+            });
+        }
 
         findViewById(R.id.btn_nav_home).setOnClickListener(v -> {
             startActivity(new Intent(this, Dashboard_Activity.class));
@@ -133,6 +152,21 @@ public class TrackingDashboardActivity extends AppCompatActivity {
             startActivity(new Intent(this, SupportDesk.class));
             finish();
         });
+    }
+
+    private void loadUserData() {
+        SessionManager session = new SessionManager(getApplicationContext());
+        CustomerResponseDTO customer = session.getCustomer();
+
+        if (customer != null && ivProfileImage != null) {
+            String imageUrl = ApiClient.IMAGE_URL + "customer/" + customer.getImage();
+            Glide.with(this)
+                    .load(imageUrl)
+                    .placeholder(android.R.drawable.sym_def_app_icon)
+                    .error(android.R.drawable.sym_def_app_icon)
+                    .circleCrop()
+                    .into(ivProfileImage);
+        }
     }
 
     private void trackOrder(String orderNumber) {

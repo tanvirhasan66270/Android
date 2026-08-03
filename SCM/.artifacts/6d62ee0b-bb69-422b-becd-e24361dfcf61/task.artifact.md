@@ -1,8 +1,3 @@
-- [x] Create `item_timeline_step.xml` template
-- [x] Update `activity_tracking_dashboard.xml`
-    - [x] Add `ivMilestonePointer` to horizontal pipeline
-    - [x] Add `containerTimeline` and remove static items
-- [x] Update `TrackingDashboardActivity.java`
-    - [x] Implement `updateMilestonePointer`
-    - [x] Implement `populateVerticalTimeline`
-- [x] Final verification
+- [x] Refine `activity_billing_page.xml` header layout
+- [x] Update `BillingPage.java` inset handling and profile loading
+- [x] Build and verify

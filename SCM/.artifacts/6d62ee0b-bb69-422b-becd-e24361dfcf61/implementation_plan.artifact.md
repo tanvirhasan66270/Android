@@ -1,46 +1,36 @@
-# Implementation Plan - Dynamic Milestone Pipeline & Vertical Timeline
+# Implementation Plan - Standardize Billing Page Header
 
-Make the "MILESTONE PROGRESS PIPELINE" and "ORDER PROCESSING UPDATE" sections in `TrackingDashboardActivity` fully dynamic based on the order status.
+Update the `BillingPage` header to match the provided design (Logo on left, Notification and Profile on right) and ensure it follows the app's standard high-fidelity style.
 
 ## Proposed Changes
 
 ### Layout Layer
 
-#### [MODIFY] [activity_tracking_dashboard.xml](file:///E:/Android/Android/SCM/app/src/main/res/layout/activity_tracking_dashboard.xml)
-- **Horizontal Stepper**:
-    - Add a Pin/Indicator icon (`ivMilestonePointer`) above the labels.
-    - Use `ConstraintLayout` to position the pointer dynamically using `bias`.
-- **Vertical Timeline**:
-    - Replace the static "Timeline Item 1" with a `LinearLayout` (`containerTimeline`) to add steps dynamically.
-    - Remove the hardcoded placeholder text.
-
-#### [NEW] [item_timeline_step.xml](file:///E:/Android/Android/SCM/app/src/main/res/layout/item_timeline_step.xml)
-- Create a template layout for a single vertical timeline step.
-- Includes: Icon, Title, Description, Date/Time, and a vertical line for continuity.
+#### [MODIFY] [activity_billing_page.xml](file:///E:/Android/Android/SCM/app/src/main/res/layout/activity_billing_page.xml)
+- **Header Refinement**:
+    - Set header height to `56dp` (standard toolbar height).
+    - Remove the `btnMenu` icon to match the design screenshot.
+    - Align the **Logo** (`ivLogo`) to the left.
+    - Group the **Notification icon** and **Profile image** on the right.
+    - Style the profile image (`profileImage`) to be `32dp x 32dp`.
 
 ### Activity Layer
 
-#### [MODIFY] [TrackingDashboardActivity.java](file:///E:/Android/Android/SCM/app/src/main/java/com/project/scm/TrackingDashboardActivity.java)
-- **Status Mapping Logic**:
-    - Define an internal list of milestones: `PENDING`, `CONFIRMED`, `PROCESSING`, `SHIPPED`, `DELIVERED`.
-- **Horizontal Update**:
-    - Implement `updateMilestonePointer(String status)` to move the pin to the correct horizontal position (0% to 100% bias).
-- **Vertical Update**:
-    - Implement `populateVerticalTimeline(String currentStatus, String date)` to clear the container and add all completed and current steps.
-    - Style active/completed steps in green and future steps in gray.
+#### [MODIFY] [BillingPage.java](file:///E:/Android/Android/SCM/app/src/main/java/com/project/scm/BillingPage.java)
+- **Inset Logic**:
+    - Implement the same dynamic inset padding logic as used in `OrderDashboardActivity` to ensure the header background flows behind the status bar correctly.
+- **Navigation logic**:
+    - Ensure the Home icon or Logo navigation (if applicable) is consistent.
+- **Data Binding**:
+    - Ensure the user's profile photo is loaded into `profileImage` using Glide (this is already partially implemented but needs to be verified with the updated layout).
 
 ## Verification Plan
 
 ### Automated Tests
-- Run `gradle_build assembleDebug` to ensure layout changes don't break the build.
+- Run `gradle_build assembleDebug` to verify compilation.
 
 ### Manual Verification
-- Track an order with status `SHIPPED`.
-- Verify the horizontal pin is over the "Shipped" label.
-- Verify the vertical timeline shows:
-    1. Order Placed (Green/Completed)
-    2. Order Confirmed (Green/Completed)
-    3. Processing (Green/Completed)
-    4. Shipped (Green/Active)
-- Track an order with status `PENDING`.
-- Verify only "Order Placed" shows in the vertical timeline and the horizontal pin is at the start.
+- Deploy to emulator.
+- Open the Billing screen.
+- Verify the header looks identical in height and layout to the provided design.
+- Verify the profile photo is loaded and circular.

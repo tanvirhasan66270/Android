@@ -143,27 +143,31 @@ public class Dashboard_Activity extends AppCompatActivity {
 
     private void setupClickListeners() {
         View trackProduct = findViewById(R.id.btn_track_product);
-        if (trackProduct != null) trackProduct.setOnClickListener(v -> startActivity(new Intent(this, TrackingDashboardActivity.class)));
+        if (trackProduct != null) trackProduct.setOnClickListener(v -> startActivity(new Intent(Dashboard_Activity.this, TrackingDashboardActivity.class)));
 
         View newOrder = findViewById(R.id.btn_new_order);
-        if (newOrder != null) newOrder.setOnClickListener(v -> startActivity(new Intent(this, OrderDashboardActivity.class)));
+        if (newOrder != null) {
+            newOrder.setOnClickListener(v -> {
+                startActivity(new Intent(Dashboard_Activity.this, OrderDashboardActivity.class));
+            });
+        }
 
         View billingLedger = findViewById(R.id.btn_billing_ledger);
-        if (billingLedger != null) billingLedger.setOnClickListener(v -> startActivity(new Intent(this, BillingPage.class)));
+        if (billingLedger != null) billingLedger.setOnClickListener(v -> startActivity(new Intent(Dashboard_Activity.this, BillingPage.class)));
 
         View supportDesk = findViewById(R.id.btn_support_desk);
-        if (supportDesk != null) supportDesk.setOnClickListener(v -> startActivity(new Intent(this, SupportDesk.class)));
+        if (supportDesk != null) supportDesk.setOnClickListener(v -> startActivity(new Intent(Dashboard_Activity.this, SupportDesk.class)));
 
         View navOrders = findViewById(R.id.btn_nav_orders);
-        if (navOrders != null) navOrders.setOnClickListener(v -> startActivity(new Intent(this, OrderDashboardActivity.class)));
+        if (navOrders != null) navOrders.setOnClickListener(v -> startActivity(new Intent(Dashboard_Activity.this, OrderDashboardActivity.class)));
 
         View navShipments = findViewById(R.id.btn_nav_shipments);
-        if (navShipments != null) navShipments.setOnClickListener(v -> startActivity(new Intent(this, TrackingDashboardActivity.class)));
+        if (navShipments != null) navShipments.setOnClickListener(v -> startActivity(new Intent(Dashboard_Activity.this, TrackingDashboardActivity.class)));
 
         View navBilling = findViewById(R.id.btn_nav_billing);
-        if (navBilling != null) navBilling.setOnClickListener(v -> startActivity(new Intent(this, BillingPage.class)));
+        if (navBilling != null) navBilling.setOnClickListener(v -> startActivity(new Intent(Dashboard_Activity.this, BillingPage.class)));
 
-        if (findAllOrder != null) findAllOrder.setOnClickListener(v -> startActivity(new Intent(this, OrderDashboardActivity.class)));
+        if (findAllOrder != null) findAllOrder.setOnClickListener(v -> startActivity(new Intent(Dashboard_Activity.this, OrderDashboardActivity.class)));
 
         View logout = findViewById(R.id.btn_logout);
         if (logout != null) logout.setOnClickListener(v -> {
