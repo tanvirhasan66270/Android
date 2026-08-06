@@ -17,7 +17,7 @@ import com.project.scm.api.ApiClient;
 import java.util.List;
 import java.util.Locale;
 
-public class RecommendedProductAdapter extends RecyclerView.Adapter<RecommendedProductAdapter.ViewHolder> {
+public class ProductViewAdapter extends RecyclerView.Adapter<ProductViewAdapter.ViewHolder> {
 
     public interface OnViewClickListener {
         void onViewClick(ProductResponseDTO product);
@@ -26,7 +26,7 @@ public class RecommendedProductAdapter extends RecyclerView.Adapter<RecommendedP
     private final List<ProductResponseDTO> productList;
     private final OnViewClickListener listener;
 
-    public RecommendedProductAdapter(List<ProductResponseDTO> productList, OnViewClickListener listener) {
+    public ProductViewAdapter(List<ProductResponseDTO> productList, OnViewClickListener listener) {
         this.productList = productList;
         this.listener = listener;
     }

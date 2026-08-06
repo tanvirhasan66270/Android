@@ -110,6 +110,12 @@ public class BillingPage extends AppCompatActivity implements InvoiceAdapter.OnI
         adapter = new InvoiceAdapter(filteredInvoices, this);
         rvInvoices.setAdapter(adapter);
 
+        if (profileImage != null) {
+            profileImage.setOnClickListener(v -> {
+                startActivity(new Intent(BillingPage.this, Profile_View_Activity.class));
+            });
+        }
+
         // Search Input Listener
         if (etSearchInvoice != null) {
             etSearchInvoice.addTextChangedListener(new TextWatcher() {
@@ -345,7 +351,9 @@ public class BillingPage extends AppCompatActivity implements InvoiceAdapter.OnI
 
     @Override
     public void onInvoiceClick(InvoiceResponseDTO invoice) {
-        showInvoiceDetailDialog(invoice);
+        Intent intent = new Intent(this, Invoice_Details_Activity.class);
+        intent.putExtra("invoice_data", new com.google.gson.Gson().toJson(invoice));
+        startActivity(intent);
     }
 
     private void showInvoiceDetailDialog(InvoiceResponseDTO inv) {

@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.project.scm.adaptor.OrderAdapter;
 import com.project.scm.adaptor.PipelineAdapter;
-import com.project.scm.adaptor.RecommendedProductAdapter;
+import com.project.scm.adaptor.ProductViewAdapter;
 import com.project.scm.api.ApiClient;
 import com.project.scm.model.response.CustomerOrderResponseDTO;
 import com.project.scm.model.response.CustomerResponseDTO;
@@ -50,7 +50,7 @@ public class Dashboard_Activity extends AppCompatActivity {
 
     // Recommended Product views
     private RecyclerView recyclerRecommended;
-    private RecommendedProductAdapter recommendedProductAdapter;
+    private ProductViewAdapter recommendedProductAdapter;
     private final List<ProductResponseDTO> recommendedProductList = new ArrayList<>();
 
     // Pipeline Views
@@ -132,7 +132,7 @@ public class Dashboard_Activity extends AppCompatActivity {
 
         if (recyclerRecommended != null) {
             recyclerRecommended.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-            recommendedProductAdapter = new RecommendedProductAdapter(recommendedProductList, product -> {
+            recommendedProductAdapter = new ProductViewAdapter(recommendedProductList, product -> {
                 Intent intent = new Intent(Dashboard_Activity.this, Product_Details_Activity.class);
                 intent.putExtra("product_data", new com.google.gson.Gson().toJson(product));
                 startActivity(intent);
@@ -155,6 +155,13 @@ public class Dashboard_Activity extends AppCompatActivity {
         View billingLedger = findViewById(R.id.btn_billing_ledger);
         if (billingLedger != null) billingLedger.setOnClickListener(v -> startActivity(new Intent(Dashboard_Activity.this, BillingPage.class)));
 
+        View btnProfileCard = findViewById(R.id.btn_profile_card);
+        if (btnProfileCard != null) {
+            btnProfileCard.setOnClickListener(v -> {
+                startActivity(new Intent(Dashboard_Activity.this, Profile_View_Activity.class));
+            });
+        }
+
         View supportDesk = findViewById(R.id.btn_support_desk);
         if (supportDesk != null) supportDesk.setOnClickListener(v -> startActivity(new Intent(Dashboard_Activity.this, SupportDesk.class)));
 
@@ -175,6 +182,12 @@ public class Dashboard_Activity extends AppCompatActivity {
             startActivity(new Intent(this, Login_Activity.class));
             finish();
         });
+
+        if (profile != null) {
+            profile.setOnClickListener(v -> {
+                startActivity(new Intent(Dashboard_Activity.this, Profile_View_Activity.class));
+            });
+        }
     }
 
 //    private void loadUserData() {

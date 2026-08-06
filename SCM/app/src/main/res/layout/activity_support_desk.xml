@@ -5,585 +5,255 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8FBFF"
+    android:background="@color/white"
     tools:context=".SupportDesk">
 
-    <!-- Header Section -->
+    <!-- Top Toolbar -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:background="@drawable/bg_support_header"
+        android:layout_height="wrap_content"
+        android:minHeight="64dp"
+        android:background="@color/white"
+        android:elevation="1dp"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/btnBack"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:id="@+id/ivChatIcon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:padding="8dp"
-            android:src="@drawable/ic_arrow_back"
-            android:contentDescription="Back"
+            android:background="@drawable/bg_circle_blue"
+            android:padding="6dp"
+            android:src="@drawable/ic_help"
+            android:contentDescription="Chat Workspace Icon"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/white" />
 
-        <ImageView
-            android:id="@+id/supportIcon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="12dp"
-            android:src="@drawable/ic_headset"
-            android:contentDescription="Support Icon"
-            app:layout_constraintBottom_toBottomOf="@id/titleLayout"
-            app:layout_constraintStart_toEndOf="@id/btnBack"
-            app:layout_constraintTop_toTopOf="@id/titleLayout" />
-
-        <LinearLayout
-            android:id="@+id/titleLayout"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:orientation="vertical"
+            android:text="Chat Workspace"
+            android:textColor="#1A1A1A"
+            android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/supportIcon"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.45">
+            app:layout_constraintStart_toEndOf="@id/ivChatIcon"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Support Desk"
-                android:textColor="@color/white"
-                android:textSize="22sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="We're here to help you"
-                android:textColor="#CCFFFFFF"
-                android:textSize="14sp" />
-        </LinearLayout>
-
-        <FrameLayout
+        <LinearLayout
+            android:id="@+id/btnHome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            app:layout_constraintBottom_toBottomOf="@id/titleLayout"
-            app:layout_constraintEnd_toStartOf="@id/profileImage"
-            app:layout_constraintTop_toTopOf="@id/titleLayout">
+            android:background="@drawable/bg_card_rounded_white"
+            android:backgroundTint="#F0F7FF"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
             <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_bell"
-                android:contentDescription="Notifications"
-                app:tint="@color/white" />
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/ic_nav_home"
+                android:contentDescription="Home Icon"
+                app:tint="@color/blue_primary" />
+
             <TextView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_gravity="top|end"
-                android:background="@drawable/bg_status_badge_paid"
-                android:backgroundTint="#EA4335"
-                android:gravity="center"
-                android:text="3"
-                android:textColor="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Home"
+                android:textColor="@color/blue_primary"
                 android:textSize="10sp"
                 android:textStyle="bold" />
-        </FrameLayout>
-
-        <ImageView
-            android:id="@+id/profileImage"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="16dp"
-            android:src="@drawable/ic_person"
-            android:contentDescription="Profile"
-            app:layout_constraintBottom_toBottomOf="@id/titleLayout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/titleLayout" />
-
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.core.widget.NestedScrollView
+    <!-- Main Content Split Pane -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:fillViewport="true"
-        app:layout_constraintBottom_toTopOf="@id/bottomActions"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/header">
 
+        <!-- Sidebar (Left) -->
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.32"
+            android:background="#F8FBFF"
+            android:orientation="vertical">
 
-            <!-- Info Card -->
-            <com.google.android.material.card.MaterialCardView
+            <EditText
+                android:id="@+id/etSearchContacts"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="12dp"
-                app:strokeColor="@color/gray_light"
-                app:strokeWidth="1dp">
+                android:layout_height="40dp"
+                android:layout_margin="12dp"
+                android:background="@drawable/bg_card_rounded_white"
+                android:drawableStart="@drawable/ic_search_product"
+                android:drawablePadding="8dp"
+                android:drawableTint="@color/gray_text"
+                android:hint="Search contacts..."
+                android:paddingHorizontal="12dp"
+                android:textSize="13sp"
+                android:inputType="text"
+                android:autofillHints="name" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="12dp">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray_light" />
 
-                    <ImageView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:src="@drawable/ic_help"
-                        android:contentDescription="Help Info"
-                        app:tint="@color/blue_primary" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvContacts"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:listitem="@layout/layout_chat_user" />
+        </LinearLayout>
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_weight="1"
-                        android:text="Our support team typically responds within 15-30 minutes. Your ticket will be auto-routed to the right team."
-                        android:textColor="@color/gray_text"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
+        <!-- Chat Area (Right) -->
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.65">
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:background="@drawable/bg_status_badge_delivered"
-                        android:backgroundTint="@color/blue_soft_bg"
-                        android:padding="4dp"
-                        android:src="@drawable/ic_due"
-                        android:contentDescription="Verified Icon"
-                        app:tint="@color/green_status" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <!-- Form Fields -->
+            <!-- Placeholder -->
             <LinearLayout
+                android:id="@+id/containerPlaceholder"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="vertical">
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="32dp"
+                android:visibility="visible">
 
-                <!-- Issue Subject -->
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-                    <ImageView android:layout_width="16dp" android:layout_height="16dp" android:src="@drawable/ic_invoice" app:tint="@color/blue_primary" android:contentDescription="Subject Icon" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="8dp" android:text="Issue Subject" android:textStyle="bold" android:textColor="#1A1A1A" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text=" *" android:textColor="@color/red_required" />
-                </LinearLayout>
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="8dp"
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:background="@drawable/bg_card_rounded_white"
-                    android:hint="Briefly describe your issue in one line..."
-                    android:paddingHorizontal="12dp"
-                    android:textSize="14sp"
-                    android:inputType="text"
-                    android:autofillHints="none" />
-
-                <!-- Related Order -->
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-                    <ImageView android:layout_width="16dp" android:layout_height="16dp" android:src="@drawable/ic_package" app:tint="@color/blue_primary" android:contentDescription="Order Icon" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="8dp" android:text="Related Order" android:textStyle="bold" android:textColor="#1A1A1A" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text=" (Optional)" android:textColor="@color/gray_text" android:textSize="12sp" />
-                </LinearLayout>
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/bg_card_rounded_white"
-                    android:hint="Enter your order ID (e.g. ORD-240720-001)"
-                    android:paddingHorizontal="12dp"
-                    android:textSize="14sp"
-                    android:inputType="text"
-                    android:autofillHints="none" />
-
-                <!-- Priority Level -->
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-                    <ImageView android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:src="@drawable/ic_flag"
-                        app:tint="@color/blue_primary"
-                        android:contentDescription="Priority Icon" />
-                    <TextView android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="Priority Level"
-                        android:textStyle="bold"
-                        android:textColor="#1A1A1A" />
-                    <TextView android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=" *"
-                        android:textColor="@color/red_required" />
-                </LinearLayout>
-
-                <Spinner
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/bg_card_rounded_white" />
-
-                <!-- Describe Issue -->
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-                    <ImageView android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:src="@drawable/ic_copy"
-                        app:tint="@color/blue_primary"
-                        android:contentDescription="Describe Icon" />
-                    <TextView android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="Describe Your Issue"
-                        android:textStyle="bold"
-                        android:textColor="#1A1A1A" />
-                    <TextView android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=" *"
-                        android:textColor="@color/red_required" />
-                </LinearLayout>
-
-                <EditText
-                    android:id="@+id/etIssue"
-                    android:layout_width="match_parent"
-                    android:layout_height="120dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/bg_card_rounded_white"
-                    android:gravity="top"
-                    android:hint="Provide detailed information about your issue..."
-                    android:inputType="textMultiLine"
-                    android:padding="12dp"
-                    android:textSize="14sp"
-                    android:autofillHints="none" />
+                    android:elevation="4dp"
+                    android:padding="24dp"
+                    android:src="@drawable/ic_help"
+                    app:tint="@color/blue_primary" />
 
                 <TextView
-                    android:id="@+id/tvCounter"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:gravity="end"
-                    android:text="0/1000"
-                    android:textColor="@color/gray_text"
-                    android:textSize="12sp" />
-
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Need Immediate Help?"
-                android:textStyle="bold"
-                android:textColor="#1A1A1A" />
-
-            <!-- Immediate Help Horizontal Scroll -->
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:scrollbars="none">
-
-                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_marginTop="24dp"
+                    android:text="SCM Chat Desk"
+                    android:textColor="#1A1A1A"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
-                    <!-- Call Support -->
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="180dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="12dp"
-                        app:cardBackgroundColor="@color/white"
-                        app:cardCornerRadius="12dp"
-                        app:strokeColor="@color/gray_light"
-                        app:strokeWidth="1dp">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:padding="12dp">
-                            <ImageView
-                                android:layout_width="32dp"
-                                android:layout_height="32dp"
-                                android:src="@drawable/ic_search_product"
-                                app:tint="@color/green_status"
-                                android:contentDescription="Call Icon" />
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-                                <TextView android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Call Support"
-                                    android:textStyle="bold"
-                                    android:textSize="12sp" />
-                                <TextView android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="017XXXXXXXX"
-                                    android:textSize="10sp"
-                                    android:textColor="@color/gray_text" />
-                            </LinearLayout>
-                            <ImageView android:layout_width="16dp"
-                                android:layout_height="16dp"
-                                android:src="@drawable/ic_chevron_right"
-                                android:contentDescription="Arrow" />
-                        </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:gravity="center"
+                    android:text="Choose a Sales Officer from the chat list sidebar to pull credentials and retrieve message records."
+                    android:textColor="@color/gray_text"
+                    android:textSize="14sp"
+                    android:lineSpacingExtra="4dp" />
+            </LinearLayout>
 
-                    <!-- Live Chat -->
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="180dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="12dp"
-                        app:cardBackgroundColor="@color/white"
-                        app:cardCornerRadius="12dp"
-                        app:strokeColor="@color/gray_light"
-                        app:strokeWidth="1dp">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:padding="12dp">
-                            <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_help" app:tint="@color/blue_primary" android:contentDescription="Chat Icon" />
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Live Chat" android:textStyle="bold" android:textSize="12sp" />
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Chat with us" android:textSize="10sp" android:textColor="@color/gray_text" />
-                            </LinearLayout>
-                            <ImageView android:layout_width="16dp" android:layout_height="16dp" android:src="@drawable/ic_chevron_right" android:contentDescription="Arrow" />
-                        </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
-
-                </LinearLayout>
-            </HorizontalScrollView>
-
-            <!-- Safety Card -->
-            <com.google.android.material.card.MaterialCardView
+            <!-- Active Chat View -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/containerChat"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
-                app:cardBackgroundColor="#F1F8E9"
-                app:cardCornerRadius="12dp"
-                app:strokeColor="#C5E1A5"
-                app:strokeWidth="1dp">
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
+                <!-- Chat Header -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/chatHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:background="@color/white"
+                    android:elevation="1dp"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/tvActiveChatName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:text="Kamal Hasan"
+                        android:textColor="#1A1A1A"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toTopOf="@id/tvActiveChatStatus"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_chainStyle="packed" />
+
+                    <TextView
+                        android:id="@+id/tvActiveChatStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:text="Online"
+                        android:textColor="@color/green_status"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvActiveChatName" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvMessages"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:background="#F0F2F5"
+                    app:layout_constraintBottom_toTopOf="@id/chatInputContainer"
+                    app:layout_constraintTop_toBottomOf="@id/chatHeader" />
+
+                <!-- Chat Input -->
                 <LinearLayout
+                    android:id="@+id/chatInputContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/white"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="12dp">
-                    <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_lock" app:tint="@color/green_status" android:contentDescription="Lock Icon" />
-                    <LinearLayout
+                    android:padding="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                    <EditText
+                        android:id="@+id/etMessage"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
                         android:layout_weight="1"
-                        android:orientation="vertical">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Your Information is Safe with Us" android:textColor="@color/green_issued" android:textStyle="bold" android:textSize="12sp" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="All tickets are encrypted and confidential." android:textColor="@color/gray_text" android:textSize="11sp" />
-                    </LinearLayout>
-                    <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/bg_status_badge_delivered" android:backgroundTint="@color/green_status" android:contentDescription="Safe" />
+                        android:background="@drawable/bg_card_rounded_white"
+                        android:backgroundTint="#F0F2F5"
+                        android:hint="Type a message..."
+                        android:maxLines="4"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="10dp"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:id="@+id/btnSend"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/bg_tracking_gradient"
+                        android:padding="12dp"
+                        android:src="@drawable/ic_send"
+                        app:tint="@color/white" />
                 </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
 
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
-
-    <!-- Bottom Actions -->
-    <LinearLayout
-        android:id="@+id/bottomActions"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:elevation="8dp"
-        android:orientation="vertical"
-        android:padding="16dp"
-        app:layout_constraintBottom_toTopOf="@id/bottomNav">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSubmit"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:backgroundTint="@color/support_blue_start"
-            android:text="Submit Ticket"
-            android:textAllCaps="false"
-            app:cornerRadius="8dp"
-            app:icon="@drawable/ic_send" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnCancel"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="12dp"
-            android:text="Cancel"
-            android:textAllCaps="false"
-            app:cornerRadius="8dp" />
-    </LinearLayout>
-
-    <!-- Bottom Nav Bar -->
-    <LinearLayout
-        android:id="@+id/bottomNav"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:background="@drawable/bg_bottom_nav"
-        android:elevation="8dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <LinearLayout
-            android:id="@+id/btn_nav_home"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackground">
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_nav_home"
-                android:contentDescription="Dashboard" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Dashboard"
-                android:textColor="#7A7A7A"
-                android:textSize="10sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/btn_nav_orders"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackground">
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_nav_orders"
-                android:contentDescription="Orders" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Orders"
-                android:textColor="#7A7A7A"
-                android:textSize="10sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/btn_nav_shipments"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackground">
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_truck"
-                android:contentDescription="Shipments" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Track"
-                android:textColor="#7A7A7A"
-                android:textSize="10sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/btn_nav_billing"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackground">
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_nav_payments"
-                android:contentDescription="Payments" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Payments"
-                android:textColor="#7A7A7A"
-                android:textSize="10sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/btn_nav_profile"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackground">
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_nav_profile"
-                app:tint="@color/blue_primary"
-                android:contentDescription="Profile" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Profile"
-                android:textColor="@color/blue_primary"
-                android:textStyle="bold"
-                android:textSize="10sp" />
-        </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </FrameLayout>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

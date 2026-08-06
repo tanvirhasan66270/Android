@@ -20,7 +20,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.project.scm.adaptor.OrderCreationAdapter;
+import com.project.scm.adaptor.OrderCreatingAdapter;
 import com.project.scm.api.ApiClient;
 import com.project.scm.api.ApiService;
 import com.project.scm.model.request.CustomerOrderRequestDTO;
@@ -49,8 +49,8 @@ public class OrderDashboardActivity extends AppCompatActivity {
     private RecyclerView recyclerOrderItems;
 
     private List<ProductResponseDTO> allProducts = new ArrayList<>();
-    private List<OrderCreationAdapter.OrderItem> selectedItems = new ArrayList<>();
-    private OrderCreationAdapter orderCreationAdapter;
+    private List<OrderCreatingAdapter.OrderItem> selectedItems = new ArrayList<>();
+    private OrderCreatingAdapter orderCreatingAdapter;
     private ApiService apiService;
     private ProductResponseDTO selectedProduct;
 
@@ -168,12 +168,12 @@ public class OrderDashboardActivity extends AppCompatActivity {
 
     private void setupRecyclerView() {
         recyclerOrderItems.setLayoutManager(new LinearLayoutManager(this));
-        orderCreationAdapter = new OrderCreationAdapter(selectedItems, position -> {
+        orderCreatingAdapter = new OrderCreatingAdapter(selectedItems, position -> {
             selectedItems.remove(position);
-            orderCreationAdapter.notifyItemRemoved(position);
+            orderCreatingAdapter.notifyItemRemoved(position);
             updateTotals();
         });
-        recyclerOrderItems.setAdapter(orderCreationAdapter);
+        recyclerOrderItems.setAdapter(orderCreatingAdapter);
     }
 
     private void loadProducts() {
@@ -233,8 +233,8 @@ public class OrderDashboardActivity extends AppCompatActivity {
 
         String notes = etProductNotes.getText().toString();
 
-        selectedItems.add(new OrderCreationAdapter.OrderItem(selectedProduct, qty, notes));
-        orderCreationAdapter.notifyItemInserted(selectedItems.size() - 1);
+        selectedItems.add(new OrderCreatingAdapter.OrderItem(selectedProduct, qty, notes));
+        orderCreatingAdapter.notifyItemInserted(selectedItems.size() - 1);
 
         etProductName.setText("");
         etProductQty.setText("1");
@@ -245,7 +245,7 @@ public class OrderDashboardActivity extends AppCompatActivity {
 
     private void updateTotals() {
         double subtotal = 0;
-        for (OrderCreationAdapter.OrderItem item : selectedItems) {
+        for (OrderCreatingAdapter.OrderItem item : selectedItems) {
             subtotal += item.product.getSellingPrice() * item.quantity;
         }
         double delivery = 13710.0; // Hardcoded to match design screenshot for fidelity
@@ -307,7 +307,7 @@ public class OrderDashboardActivity extends AppCompatActivity {
         dto.setCodAmount(codAmt);
 
         List<OrderLineItemRequestDTO> items = new ArrayList<>();
-        for (OrderCreationAdapter.OrderItem item : selectedItems) {
+        for (OrderCreatingAdapter.OrderItem item : selectedItems) {
             OrderLineItemRequestDTO line = new OrderLineItemRequestDTO();
             line.setProductId(item.product.getId());
             line.setQuantity(item.quantity);

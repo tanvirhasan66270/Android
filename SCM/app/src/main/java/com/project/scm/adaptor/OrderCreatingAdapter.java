@@ -11,7 +11,7 @@ import com.project.scm.R;
 import com.project.scm.model.response.ProductResponseDTO;
 import java.util.List;
 
-public class OrderCreationAdapter extends RecyclerView.Adapter<OrderCreationAdapter.ViewHolder> {
+public class OrderCreatingAdapter extends RecyclerView.Adapter<OrderCreatingAdapter.ViewHolder> {
 
     public static class OrderItem {
         public ProductResponseDTO product;
@@ -32,7 +32,7 @@ public class OrderCreationAdapter extends RecyclerView.Adapter<OrderCreationAdap
         void onDelete(int position);
     }
 
-    public OrderCreationAdapter(List<OrderItem> items, OnItemDeleteListener deleteListener) {
+    public OrderCreatingAdapter(List<OrderItem> items, OnItemDeleteListener deleteListener) {
         this.items = items;
         this.deleteListener = deleteListener;
     }
@@ -80,7 +80,7 @@ public class OrderCreationAdapter extends RecyclerView.Adapter<OrderCreationAdap
         return items.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvName, tvQty, tvNotes;
         ImageView btnDelete, ivProduct;
 
